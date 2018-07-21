@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../css/swiper.css"/>
+    <script type="text/javascript" src="../js/swiper.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+    <style type="text/css">
+        .form-info {
+            border: 1px solid orange;
+            margin: 100px auto;
+            width: 30%;
+            padding: 50px;
+        }
+
+        .form-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .form-info .submit {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="form-info">
+        <h2>用户注册</h2>
+
+        <form action="/api/v1/register/" method="post" id="myform">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input name="name" type="text" class="form-control" id="username" placeholder="请输入用户名" onblur="sendRequest()">
+                <div id="msg"></div>
+                <p class="help-block">请输入6-16位用户名</p>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码"/>
+                <p class="help-block">请输入6位以上拼音字母组合密码</p>
+            </div>
+            <div class="form-group">
+                <label for="password_again">确认密码</label>
+                <input type="password" id="password_again" name="password_again" class="form-control right" placeholder="请再次输入密码"/>
+                <p class="help-block">请再次输入6位以上拼音字母组合密码</p>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputPassword1">邮箱</label>
+                <input name="email" type="text" class="form-control" placeholder="请再次输入密码">
+                <div id="msg"></div>
+                <p class="help-block">请输入邮箱</p>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">头像</label>
+                <input name="icon" type="file" id="exampleInputFile">
+            </div>
+            <div class="submit">
+                <button type="submit" class="btn btn-primary">注册</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="/static/js/jquery.validate.min.js"></script>
+<script src="/static/js/additional-methods.min.js"></script>
+
+<script>
+    $("#myform").validate({
+        rules: {
+            password: "required",
+            password_again: {
+                equalTo: "#password"
+            }
+        }
+    });
+</script>
+
+<script type="text/javascript">
+//第一步：
+/*XMLHTTPRequest是AJAX应用中的核心API，它被js调用以向服务器发送请求，并异步接收服务器返回的数据后，更新局部页面。使用AJAX功能时，首先要在js中创建XMLHTTPRequest对象：*/
+	var request;//异步请求对象
+	function createXMLHttpRequest() {
+		if (window.ActiveXObject) {//IE浏览器
+			request = new ActiveXObject("Microsoft.XMLHTTP");
+		} else if (window.XMLHttpRequest) {//FireFox，netscape等等浏览器
+			request = new XMLHttpRequest();
+		} else {
+			window.alert("你的浏览器不支持XMLHTTPRequest，将无使用AJAX功能！");
+		}
+	}
+/*现在我们有了请求对象，接下来要考虑的是，XMLHTTPRequest对象发送了请求后，服务器返回的结果应如何处理，即AJAX中的回调方法。*/
+	//回调函数[响应之后执行的函数]
+	function processResult() {
+	    if ((request.readyState == 4) && (request.status == 200)) {
+			var result = request.responseText;//获得返回数据
+			if(result == 1){
+				//显示到指定的组件中
+				document.getElementById("msg").innerHTML ="<span style='color:#00cc00'>该用户名可以使用</span>" ;
+			}else{
+				//显示到指定的组件中
+				document.getElementById("msg").innerHTML ="<span style='color:#cc0000'>该用户名已经被注册！</span>" ;
+			}
+		}
+	}
+
+	//发送请求,绑定回调方法
+	function sendRequest() {
+		//创建XMLHTTPRequest对象
+		createXMLHttpRequest();
+		//绑定回调方法（因为是异步请求，这句代码指示了请求结果返回后，由那个js函数接收处理），
+		request.onreadystatechange = processResult;
+		//获得输入框中的内容
+		var username = document.getElementById("username").value;
+
+		//发送get请求
+		request.open("GET", "/api/v1/register/?username="+username, true);
+		//发送Post请求
+		// request.open("POST", "/api/v1/register/", true);
+		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		//将userName做为请求参数发送上去
+		request.send(username);
+		//request.send(null);
+	}
+</script>
+
+
+</html>
