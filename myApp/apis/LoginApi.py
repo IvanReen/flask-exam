@@ -56,14 +56,12 @@ class Login(Resource):
                 returndata['status'] = 200
                 returndata['msg'] = '验证成功'
                 returndata['data'] = user
-                return returndata
             else:
                 returndata['status'] = 401
                 returndata['msg'] = '登录失败'
                 returndata['error'] = '用户密码错误'
-                return returndata
         else:
             returndata['status'] = 401
             returndata['msg'] = '登录失败'
             returndata['error'] = '账号有误'
-            return returndata
+        return returndata

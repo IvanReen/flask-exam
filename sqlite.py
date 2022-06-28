@@ -16,7 +16,10 @@ with open('01-轮播图.json', 'r') as f:
     # 获取所有的键
     for i in range(9):
         datas = data[i]
-        cursor.execute('insert into banner(bannerid,type,object_id,title,image,description,userid,isdelete) values ("{}","{}","{}","{}","{}","{}","{}","{}")'.format(str(datas.get('bannerid')), datas.get('type'), datas.get('object_id'), datas.get('title'), datas.get('image'), datas.get('description'), datas.get('userid'), 0))
+        cursor.execute(
+            f"""insert into banner(bannerid,type,object_id,title,image,description,userid,isdelete) values ("{str(datas.get('bannerid'))}","{datas.get('type')}","{datas.get('object_id')}","{datas.get('title')}","{datas.get('image')}","{datas.get('description')}","{datas.get('userid')}","0")"""
+        )
+
 
         db.commit()
     db.close()

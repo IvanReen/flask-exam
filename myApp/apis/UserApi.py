@@ -29,13 +29,7 @@ class UserResource(Resource):
         token = parse.get('token')
 
         returndata = {}
-        userid = cache.get(token)
-        if not userid:
-            returndata['status'] = 201
-            returndata['msg'] = '激活超时'
-            returndata['error'] = '激活失败'
-            return returndata
-        else:
+        if userid := cache.get(token):
             cache.delete(token)
             user = User.query.get(userid)
             user.isactive = True
@@ -45,4 +39,8 @@ class UserResource(Resource):
             returndata['status'] = 200
             returndata['msg'] = '激活成功'
             returndata['data'] = user
-            return returndata
+        else:
+            returndata['status'] = 201
+            returndata['msg'] = '激活超时'
+            returndata['error'] = '激活失败'
+        return returndata

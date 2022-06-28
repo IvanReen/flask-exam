@@ -33,7 +33,10 @@ with open('../02-电影列表.json', 'r') as f:
     # 获取所有的键
     for i in range(10):
         datas = data[i]
-        cursor.execute('insert into movies(postid,title,wx_small_app_title,discussion,image,rating,duration,publish_time,like_num,share_num,post_type,request_url,tags,isdelete) values ("{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}")'.format(str(datas.get('postid')), datas.get('title'), datas.get('wx_small_app_title'), datas.get('discussion'), datas.get('image'), datas.get('rating'), datas.get('duration'+'分钟'), datas.get('publish_time'), datas.get('like_num'), datas.get('share_num'), datas.get('post_type'), datas.get('request_url'), datas.get('tags'), 0))
+        cursor.execute(
+            f"""insert into movies(postid,title,wx_small_app_title,discussion,image,rating,duration,publish_time,like_num,share_num,post_type,request_url,tags,isdelete) values ("{str(datas.get('postid'))}","{datas.get('title')}","{datas.get('wx_small_app_title')}","{datas.get('discussion')}","{datas.get('image')}","{datas.get('rating')}","{datas.get('duration'+'分钟')}","{datas.get('publish_time')}","{datas.get('like_num')}","{datas.get('share_num')}","{datas.get('post_type')}","{datas.get('request_url')}","{datas.get('tags')}","{0}")"""
+        )
+
 
         db.commit()
     db.close()

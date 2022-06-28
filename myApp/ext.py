@@ -23,7 +23,7 @@ def send_mail(user):
         recipients=[user.email],
         sender='small_pupil@163.com'
     )
-    active_url = 'http://127.0.0.1:5000/api/v1/user/?token=' + user.token
+    active_url = f'http://127.0.0.1:5000/api/v1/user/?token={user.token}'
     body_html = render_template('useractive.html', name=user.name, active_url=active_url)
     msg.html = body_html
     mail.send(msg)
