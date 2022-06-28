@@ -58,8 +58,7 @@ def check_permission_control(permission):
     def check_permission(func):
         def check(*args, **kwargs):
             parse = parser_post.parse_args()
-            token = parse.get('token')
-            if token:
+            if token := parse.get('token'):
                 users = User.query.filter(User.token == token)
                 if users.count() > 0:
                     user = users.first()
@@ -78,23 +77,16 @@ class MoviesResource(Resource):
     @marshal_with(result_fields_get)
     def get(self):
         parse = parser_get.parse_args()
-        postid = parse.get('postid')
-        returndata = {}
-
-        if postid:
+        if postid := parse.get('postid'):
             movies = Movies.query.filter(Movies.postid == postid).filter(Movies.isdelete == False)
         else:
             movies = Movies.query.all()
-        returndata['status'] = 200
-        returndata['msg'] = '数据获取成功'
-        returndata['data'] = movies
-        return returndata
+        return {'status': 200, 'msg': '数据获取成功', 'data': movies}
 
     @check_permission_control(ADMIN)
     @marshal_with(result_fields_post)
     def post(self):
         parse = parser_post.parse_args()
-        returndata = {}
         movie = Movies()
         movie.id = parse.get('postid')
         movie.showname = parse.get('title')
@@ -109,7 +101,4 @@ class MoviesResource(Resource):
 
         db.session.add(movie)
         db.session.commit()
-        returndata['status'] = 200
-        returndata['msg'] = '数据获取成功'
-        returndata['data'] = movie
-        return returndata
+        return {'status': 200, 'msg': '数据获取成功', 'data': movie}

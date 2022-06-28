@@ -42,14 +42,13 @@ class PasswordChange(Resource):
                 returndata['status'] = 200
                 returndata['msg'] = '修改密码成功'
 
-                return returndata
             else:  # 密码错误
                 returndata['status'] = 401
                 returndata['msg'] = '无法修改密码'
                 returndata['error'] = '旧密码错误'
-                return returndata
         else:
             returndata['status'] = 401
             returndata['msg'] = '无此用户信息'
             returndata['error'] = 'token错误'
-            return returndata
+
+        return returndata

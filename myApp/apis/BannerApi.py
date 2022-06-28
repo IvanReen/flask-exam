@@ -24,9 +24,4 @@ class BannerResource(Resource):
     @marshal_with(result_fields)
     def get(self):
         cinemas = Banner.query.order_by(-Banner.bannerid)
-        returndata = {
-            'status': 200,
-            'msg': '获取数据成功',
-            'data': cinemas
-        }
-        return returndata
+        return {'status': 200, 'msg': '获取数据成功', 'data': cinemas}

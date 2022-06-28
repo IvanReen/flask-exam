@@ -18,7 +18,7 @@ parser.add_argument('newpassword', type=str, required=True, help='缺少新密�
 
 class IconFormat(fields.Raw):
     def format(self,value):
-        return '/static/img/' + value
+        return f'/static/img/{value}'
 
 user_fields = {
     'icon': IconFormat(attribute='icon')
@@ -65,15 +65,12 @@ class UserInfoChange(Resource):
                 returndata['status'] = 200
                 returndata['msg'] = '用户修改信息成功'
 
-                return returndata
             else:  # 密码错误
                 returndata['status'] = 401
                 returndata['msg'] = '无法修改密码'
                 returndata['error'] = '旧密码错误'
-                return returndata
-
         else:
             returndata['status'] = 401
             returndata['msg'] = '无此用户信息'
             returndata['error'] = 'token错误'
-            return returndata
+        return returndata
